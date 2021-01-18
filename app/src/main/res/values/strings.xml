@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">EduBot</string>
+    <string name="talk">TALK</string>
+    <string name="stop">STOP</string>
+    <string name="textview">TextView</string>
+    <string name="input_answer">Input Answer</string>
+    <string name="input_questions">Input Questions</string>
+    <string name="todo">TODO</string>
+    <string name="selectDevice">ডিভাইস নির্বাচন করুন</string>
+
+
+</resources>

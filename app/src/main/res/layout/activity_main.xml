@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="100dp"
+    android:background="#FFFFFF"
+    android:backgroundTint="@color/white"
+    tools:context=".MainActivity">
+
+
+    <Button
+        android:id="@+id/talkButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#4CAF50"
+        android:onClick="TalkButton"
+        android:text="@string/talk" />
+
+    <Button
+        android:id="@+id/stopButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#E10404"
+        android:onClick="StopButton"
+        android:text="@string/stop" />
+
+    <TextView
+        android:id="@+id/userChat"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:textColor="#009688" />
+
+    <TextView
+        android:id="@+id/aiChat"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:textColor="#009688" />
+
+    <Button
+        android:id="@+id/askButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:backgroundTint="#CDDC39"
+        android:onClick="QuestionButton"
+        android:text="@string/input_questions" />
+
+    <Button
+        android:id="@+id/answerButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:backgroundTint="#3F51B5"
+        android:onClick="AnswerButton"
+        android:text="@string/input_answer" />
+
+    <ImageButton
+        android:id="@+id/blutoothButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#03A9F4"
+        android:contentDescription="@string/todo"
+        android:onClick="BlutoothButton"
+        app:srcCompat="@android:drawable/stat_sys_data_bluetooth" />
+
+
+</LinearLayout>
