@@ -547,7 +547,7 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
         //Wait for user response
         //System.out.println("\n\nType something that you want me to search on the internet...");
         //String nextLine = scanner.nextLine();
-        String searchText = wikiSearch +" wikiPedia";
+        String searchText = wikiSearch +" simple wiki english";
         //System.out.println("Searching on the web....");
 
         Document google = Jsoup.connect("https://www.google.com/search?q="+searchText).get();
