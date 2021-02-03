@@ -13,4 +13,5 @@
 
     <color name="colorOff">#FFFFFF</color>
     <color name="colorOn">#E040FB</color>
+    <color name="tfe_semi_transparent">#66000000</color>
 </resources>

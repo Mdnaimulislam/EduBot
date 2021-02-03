@@ -30,10 +30,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import org.apache.commons.lang.StringEscapeUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.select.Elements;
+import org.jsoup.nodes.Element;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -164,14 +163,16 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
         //text to speech(setting the language bangla)
 
         TextToSpeech tts = new TextToSpeech(this, this);
-        tts.setLanguage(Locale.forLanguageTag("bn-BD"));
+        tts.setLanguage(Locale.forLanguageTag("en-US"));
+        tts.setPitch(0.8f);
+        tts.setSpeechRate(1f);
 
         //setting up speech reconization language to bangla
 
         intentRecognizer = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-        intentRecognizer.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "bn-BD");
-        intentRecognizer.putExtra(RecognizerIntent.EXTRA_LANGUAGE_PREFERENCE, "bn-BD");
-        intentRecognizer.putExtra(RecognizerIntent.EXTRA_ONLY_RETURN_LANGUAGE_PREFERENCE, "bn-BD");
+        intentRecognizer.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "en-US");
+        intentRecognizer.putExtra(RecognizerIntent.EXTRA_LANGUAGE_PREFERENCE, "en-US");
+        intentRecognizer.putExtra(RecognizerIntent.EXTRA_ONLY_RETURN_LANGUAGE_PREFERENCE, "en-US");
         intentRecognizer.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, this.getPackageName());
         intentRecognizer.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_WEB_SEARCH);
 
@@ -238,7 +239,11 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
                                     System.out.println(Qanswer);
 
                                     if (Qanswer != null) {
-                                       intentAction("A");
+                                       try {
+                                           intentAction("A");
+                                       }catch (Exception e){
+
+                                       }
                                         tts.speak(Qanswer, TextToSpeech.QUEUE_FLUSH, null);
                                         aiChat.setText(Qanswer);
 
@@ -247,8 +252,7 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
                                         try {
                                             Qanswer = QueryWiki(finalInput);
 
-                                            if (Qanswer.equals("E") || Qanswer.contains("}")) {
-                                                aiChat.setText("No Answer");
+
 
                                                 /*
                                                 try {
@@ -260,9 +264,7 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
                                                 }
 
                                                  */
-                                            }
-                                            else {
-                                                intentAction("A");
+
                                                 tts.speak(Qanswer, TextToSpeech.QUEUE_FLUSH, null);
                                                 aiChat.setText(Qanswer);
                                                 while (tts.isSpeaking()) {
@@ -278,7 +280,7 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
 
                                                  */
 
-                                            }
+
                                         } catch (IOException e) {
                                             e.printStackTrace();
                                         }
@@ -545,38 +547,37 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
         //Wait for user response
         //System.out.println("\n\nType something that you want me to search on the internet...");
         //String nextLine = scanner.nextLine();
-        String searchText = wikiSearch + " wikipedia";
+        String searchText = wikiSearch;
         //System.out.println("Searching on the web....");
 
         Document google = Jsoup.connect("https://www.google.com/search?q="+searchText).get();
 
-        Elements weblink= google.getElementsByTag("cite");
+        Element link= google.getElementsByClass("yuRUbf").select("a").first();
 
+        String relHref = link.attr("href"); // == "/"
+        System.out.println(relHref);
+        String absHref = link.attr("abs:href");
+        System.out.println(absHref);
 
-        String fisrtlink= weblink.get(0).text();
-        System.out.println(fisrtlink);
-
-        String key= URLEncoder.encode(fisrtlink.substring(fisrtlink.lastIndexOf(" › ") + 3, fisrtlink.length()), encoding);
-
-        //System.out.println(key);
 
 
         //Get the first link about Wikipedia
         //String wikipediaURL = "https://bn.wikipedia.org/wiki/"+key;
         //System.out.println(wikipediaURL);
-
+        String key=URLEncoder.encode(relHref.substring(relHref.lastIndexOf("/") + 1, relHref.length()), encoding);
+        System.out.println(key);
 
         //Use Wikipedia API to get JSON File
-        String wikipediaApiJSON = "https://bn.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&exintro=&explaintext=&titles="+ key;
+        String wikipediaApiJSON = "https://simple.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&exintro=&explaintext=&titles="+ key;
 
         //Let's see what it found
         //System.out.println(wikipediaURL);
-        //System.out.println(wikipediaApiJSON);
+        System.out.println(wikipediaApiJSON);
 
         //"extract":" the summary of the article
         HttpURLConnection httpcon = (HttpURLConnection) new URL(wikipediaApiJSON).openConnection();
-        httpcon.addRequestProperty("User-Agent", "Mozilla/5.0");
         BufferedReader in = new BufferedReader(new InputStreamReader(httpcon.getInputStream()));
+
 
         //Read line by line
         String responseSB = in.lines().collect(Collectors.joining());
@@ -585,9 +586,6 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
         //Print the result for us to see
         if(responseSB.contains("missing")) {
             String error = responseSB.split("missing\":\"")[1];
-            if (error.contains("}")) {
-                return ret;
-            }
         }
         else {
             result = responseSB.split("extract\":\"")[1];
@@ -595,9 +593,9 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
 
         //Tell only the 150 first characters of the result
         String textToTell = result.length() > 1500 ? result.substring(0, 1500) : result;
+        System.out.println(textToTell);
 
-        String output= StringEscapeUtils.unescapeJava(textToTell);
 
-        return output;
+        return textToTell;
     }
 }

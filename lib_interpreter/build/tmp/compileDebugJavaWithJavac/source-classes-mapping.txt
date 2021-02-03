@@ -1,0 +1,7 @@
+org/tensorflow/lite/examples/detection/com.example.edubot.tflite/TFLiteObjectDetectionAPIModel.java
+ org.tensorflow.lite.examples.detection.com.example.edubot.tflite.TFLiteObjectDetectionAPIModel
+org/tensorflow/lite/examples/detection/com.example.edubot.tflite/Detector.java
+ org.tensorflow.lite.examples.detection.com.example.edubot.tflite.Detector
+ org.tensorflow.lite.examples.detection.com.example.edubot.tflite.Detector$Recognition
+org/tensorflow/lite/examples/detection/com.example.edubot.tflite/BuildConfig.java
+ org.tensorflow.lite.examples.detection.com.example.edubot.tflite.BuildConfig
